@@ -132,5 +132,12 @@ namespace Jamestown
                 selectionArea.Text = "No Selection";
             }
         }
+
+        private void zoomDropdown_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            int size = int.Parse(e.ClickedItem.Tag as string);
+            mainMap.TileSize = size;
+            zoomDropdown.Text = e.ClickedItem.Text;
+        }
     }
 }

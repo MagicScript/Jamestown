@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
@@ -36,6 +37,17 @@
             this.mainStatus = new System.Windows.Forms.StatusStrip();
             this.terrainLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.selectionArea = new System.Windows.Forms.ToolStripStatusLabel();
+            this.zoomDropdown = new System.Windows.Forms.ToolStripDropDownButton();
+            this.xToolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.xToolStripMenuItem9 = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMap = new Jamestown.MapControl();
             this.zonedOrderInspector = new Jamestown.ZonedOrderInspector();
             this.settlementInspector_ = new Jamestown.SettlementInspector();
@@ -125,24 +137,111 @@
             // 
             this.mainStatus.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.terrainLabel,
-            this.selectionArea});
+            this.selectionArea,
+            this.zoomDropdown});
             this.mainStatus.Location = new System.Drawing.Point(0, 643);
             this.mainStatus.Name = "mainStatus";
             this.mainStatus.Size = new System.Drawing.Size(1136, 22);
             this.mainStatus.TabIndex = 3;
-            this.mainStatus.Text = "statusStrip1";
+            this.mainStatus.Text = "16x";
             // 
             // terrainLabel
             // 
+            this.terrainLabel.AutoSize = false;
             this.terrainLabel.Name = "terrainLabel";
-            this.terrainLabel.Size = new System.Drawing.Size(118, 17);
-            this.terrainLabel.Text = "toolStripStatusLabel1";
+            this.terrainLabel.Size = new System.Drawing.Size(150, 17);
+            this.terrainLabel.Text = "Terrain";
             // 
             // selectionArea
             // 
+            this.selectionArea.AutoSize = false;
             this.selectionArea.Name = "selectionArea";
-            this.selectionArea.Size = new System.Drawing.Size(118, 17);
+            this.selectionArea.Size = new System.Drawing.Size(150, 17);
             this.selectionArea.Text = "toolStripStatusLabel1";
+            // 
+            // zoomDropdown
+            // 
+            this.zoomDropdown.AutoSize = false;
+            this.zoomDropdown.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.zoomDropdown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.zoomDropdown.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.xToolStripMenuItem9,
+            this.xToolStripMenuItem8,
+            this.xToolStripMenuItem7,
+            this.xToolStripMenuItem6,
+            this.xToolStripMenuItem5});
+            this.zoomDropdown.Image = ((System.Drawing.Image)(resources.GetObject("zoomDropdown.Image")));
+            this.zoomDropdown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.zoomDropdown.Name = "zoomDropdown";
+            this.zoomDropdown.Size = new System.Drawing.Size(40, 20);
+            this.zoomDropdown.Text = "2x";
+            this.zoomDropdown.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.zoomDropdown.DropDownItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.zoomDropdown_DropDownItemClicked);
+            // 
+            // xToolStripMenuItem8
+            // 
+            this.xToolStripMenuItem8.Name = "xToolStripMenuItem8";
+            this.xToolStripMenuItem8.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem8.Tag = "16";
+            this.xToolStripMenuItem8.Text = "8x";
+            // 
+            // xToolStripMenuItem7
+            // 
+            this.xToolStripMenuItem7.Name = "xToolStripMenuItem7";
+            this.xToolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem7.Tag = "8";
+            this.xToolStripMenuItem7.Text = "4x";
+            // 
+            // xToolStripMenuItem6
+            // 
+            this.xToolStripMenuItem6.Name = "xToolStripMenuItem6";
+            this.xToolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem6.Tag = "4";
+            this.xToolStripMenuItem6.Text = "2x";
+            // 
+            // xToolStripMenuItem5
+            // 
+            this.xToolStripMenuItem5.Name = "xToolStripMenuItem5";
+            this.xToolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem5.Tag = "2";
+            this.xToolStripMenuItem5.Text = "1x";
+            // 
+            // xToolStripMenuItem4
+            // 
+            this.xToolStripMenuItem4.Name = "xToolStripMenuItem4";
+            this.xToolStripMenuItem4.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem4.Text = "16x";
+            // 
+            // xToolStripMenuItem3
+            // 
+            this.xToolStripMenuItem3.Name = "xToolStripMenuItem3";
+            this.xToolStripMenuItem3.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem3.Text = "8x";
+            // 
+            // xToolStripMenuItem2
+            // 
+            this.xToolStripMenuItem2.Name = "xToolStripMenuItem2";
+            this.xToolStripMenuItem2.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem2.Text = "4x";
+            // 
+            // xToolStripMenuItem1
+            // 
+            this.xToolStripMenuItem1.Name = "xToolStripMenuItem1";
+            this.xToolStripMenuItem1.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem1.Text = "2x";
+            // 
+            // xToolStripMenuItem
+            // 
+            this.xToolStripMenuItem.Name = "xToolStripMenuItem";
+            this.xToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem.Text = "1x";
+            // 
+            // xToolStripMenuItem9
+            // 
+            this.xToolStripMenuItem9.Name = "xToolStripMenuItem9";
+            this.xToolStripMenuItem9.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem9.Tag = "32";
+            this.xToolStripMenuItem9.Text = "16x";
             // 
             // mainMap
             // 
@@ -236,6 +335,17 @@
         private SettlementInspector settlementInspector_;
         private System.Windows.Forms.ToolStripStatusLabel selectionArea;
         private ZonedOrderInspector zonedOrderInspector;
+        private System.Windows.Forms.ToolStripDropDownButton zoomDropdown;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem8;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem9;
     }
 }
 
