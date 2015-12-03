@@ -157,8 +157,22 @@ namespace GameLib
             order.Clear();
         }
 
-        public void ProcessTurn()
+        internal void ProcessTurn()
         {
+            List<Order> remaining = new List<Order>();
+            foreach(var order in orders_)
+            {
+                order.ProcessTurn();
+                if (order.GetWorkLeft() > 0)
+                { 
+                    remaining.Add(order);
+                }
+                else
+                {
+                    order.Clear();
+                }
+            }
+            orders_ = remaining;
         }
     }
 }

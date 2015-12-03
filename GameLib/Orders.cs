@@ -37,10 +37,20 @@ namespace GameLib
 
         protected internal void Clear()
         {
-            foreach(var p in assignedPersons_)
+            foreach(var p in assignedPersons_.AsEnumerable().ToArray())
             {
                 p.WorkOrder = null;
             }
+        }
+
+        internal virtual void ProcessTurn()
+        {
+            
+        }
+
+        public virtual int GetWorkLeft()
+        {
+            return -1;
         }
     }
 
@@ -73,6 +83,47 @@ namespace GameLib
         {
             Color = Color.Red;
             Name = "Clear Trees";
+        }
+
+        internal override void ProcessTurn()
+        {
+            int workLeft = AssignedPersons.Count() * 3;
+            if (workLeft <= 0)
+                return;
+
+            for(int i = X; i < X + Width; ++i)
+            {
+                for(int j = Y; j < Y + Height; ++j)
+                {
+                    if(Settlement.Map.GetTree(i, j) != TreeType.None)
+                    {
+                        Settlement.Map.RemoveTree(i, j);
+                        if (--workLeft == 0)
+                            return;
+                    }
+                }
+            }
+        }
+
+        public override int GetWorkLeft()
+        {
+            int assignedPersonCount = AssignedPersons.Count();
+            if (assignedPersonCount <= 0)
+                return -1;
+
+            int workToDo = 0;
+
+            for (int i = X; i < X + Width; ++i)
+            {
+                for (int j = Y; j < Y + Height; ++j)
+                {
+                    if (Settlement.Map.GetTree(i, j) != TreeType.None)
+                    {
+                        ++workToDo;
+                    }
+                }
+            }
+            return (int)Math.Ceiling((double)workToDo / (3 * assignedPersonCount));
         }
     }
 

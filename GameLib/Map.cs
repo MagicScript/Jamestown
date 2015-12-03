@@ -16,7 +16,8 @@ namespace GameLib
 
     public enum TreeType
     {
-        None
+        None,
+        Oak
     }
 
     public class Map
@@ -38,11 +39,11 @@ namespace GameLib
                 heights_ = new int[width, height];
 
                 Random R = new Random();
-                for(int y = 0; y < height; ++y)
+                for (int y = 0; y < height; ++y)
                 {
-                    for(int x = 0; x < width; ++x)
+                    for (int x = 0; x < width; ++x)
                     {
-                        if(x < 5 || y < 5 || x >= width-5 || y >= height-5)
+                        if (x < 5 || y < 5 || x >= width - 5 || y >= height - 5)
                         {
                             heights_[x, y] = -R.Next(255);
                         }
@@ -57,7 +58,7 @@ namespace GameLib
                 }
 
                 int deepCount = 0;
-                while(deepCount < 5)
+                while (deepCount < 5)
                 {
                     int x = R.Next(width);
                     int y = R.Next(height);
@@ -81,7 +82,7 @@ namespace GameLib
                         {
                             landTypes_[x, y] = LandType.Water;
                         }
-                        else if(myHeight < 24)
+                        else if (myHeight < 24)
                         {
                             landTypes_[x, y] = (LandType)R.Next(3);
                         }
@@ -93,6 +94,23 @@ namespace GameLib
                 }
                 for (int i = 0; i < smoothCount; ++i)
                     Smooth();
+
+                for (int y = 0; y < height; ++y)
+                {
+                    for (int x = 0; x < width; ++x)
+                    {
+                        if(landTypes_[x,y] == LandType.Forest)
+                        {
+                            if (R.NextDouble() <= 0.15)
+                                treeTypes_[x, y] = TreeType.Oak;
+                        }
+                        else if(landTypes_[x,y] == LandType.Plain)
+                        {
+                            if (R.NextDouble() <= 0.01)
+                                treeTypes_[x, y] = TreeType.Oak;
+                        }
+                    }
+                }
             }
 
             private int Gaussian(Random R, int mean, int stdDev)
@@ -201,6 +219,11 @@ namespace GameLib
             {
                 return heights_[x, y];
             }
+
+            internal void RemoveTree(int x, int y)
+            {
+                treeTypes_[x, y] = TreeType.None;
+            }
         }
 
         public int Width { get; private set; }
@@ -229,6 +252,11 @@ namespace GameLib
         public int GetHeight(int x, int y)
         {
             return singleSection.GetHeight(x, y);
+        }
+
+        internal void RemoveTree(int x, int y)
+        {
+            singleSection.RemoveTree(x, y);
         }
     }
 }

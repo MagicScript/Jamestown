@@ -18,5 +18,13 @@ namespace GameLib
         {
             settlements_.Add(new Settlement("Jamestown", new Map(1000, 1000, 10, 5)));
         }
+
+        public void ProcessTurn()
+        {
+            foreach(var s in settlements_)
+            {
+                s.ProcessTurn();
+            }
+        }
     }
 }

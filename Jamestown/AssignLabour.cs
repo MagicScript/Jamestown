@@ -22,6 +22,8 @@ namespace Jamestown
 
             personList.Persons = order.Settlement.Persons;
             titleLabel_.Text = order.Name;
+
+            UpdateDuration();
         }
 
         private void doneButton_Click(object sender, EventArgs e)
@@ -38,6 +40,7 @@ namespace Jamestown
 
             //Requery
             personList.Persons = order_.Settlement.Persons;
+            UpdateDuration();
         }
 
         private void unassignButton_Click(object sender, EventArgs e)
@@ -50,6 +53,18 @@ namespace Jamestown
 
             //Requery
             personList.Persons = order_.Settlement.Persons;
+            UpdateDuration();
+        }
+
+        private void UpdateDuration()
+        {
+            int workLeft = order_.GetWorkLeft();
+            if (workLeft < 0)
+                durationLabel.Text = "This order will never complete.";
+            else if (workLeft == 0)
+                durationLabel.Text = "This order is already complete.";
+            else
+                durationLabel.Text = string.Format("This order will complete in {0} weeks.", workLeft);
         }
     }
 }

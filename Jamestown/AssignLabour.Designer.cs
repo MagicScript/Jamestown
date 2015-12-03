@@ -34,6 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.titleLabel_ = new System.Windows.Forms.Label();
             this.personList = new Jamestown.PersonList();
+            this.durationLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // doneButton
@@ -69,7 +70,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 38);
+            this.label1.Location = new System.Drawing.Point(12, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(134, 13);
             this.label1.TabIndex = 4;
@@ -93,11 +94,21 @@
             this.personList.Size = new System.Drawing.Size(428, 313);
             this.personList.TabIndex = 6;
             // 
+            // durationLabel
+            // 
+            this.durationLabel.AutoSize = true;
+            this.durationLabel.Location = new System.Drawing.Point(12, 51);
+            this.durationLabel.Name = "durationLabel";
+            this.durationLabel.Size = new System.Drawing.Size(150, 13);
+            this.durationLabel.TabIndex = 7;
+            this.durationLabel.Text = "This order will never complete.";
+            // 
             // AssignLabour
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(531, 392);
+            this.Controls.Add(this.durationLabel);
             this.Controls.Add(this.personList);
             this.Controls.Add(this.titleLabel_);
             this.Controls.Add(this.label1);
@@ -118,5 +129,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label titleLabel_;
         private PersonList personList;
+        private System.Windows.Forms.Label durationLabel;
     }
 }

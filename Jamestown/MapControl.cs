@@ -226,7 +226,27 @@ namespace Jamestown
                 }
             }
 
-            if(selectedBuilding_ != null)
+            for (int j = startY; j < endY; ++j)
+            {
+                int top = j * tileSize_ - lookLocation_.Y;
+
+                for (int i = startX; i < endX; ++i)
+                {
+                    Point topLeft = new Point(i * tileSize_ - lookLocation_.X, top);
+                    if (mode_ == MapMode.Terrain)
+                    {
+                        TreeType type = map_.GetTree(i, j);
+                        if(type == TreeType.Oak)
+                        {
+                            RectangleF rect = new RectangleF(topLeft, new Size(5 * tileSize_, 5 * tileSize_));
+                            rect.Offset(-2.5f * tileSize_, -2.5f * tileSize_);
+                            e.Graphics.FillEllipse(Brushes.Green, rect);
+                        }
+                    }
+                }
+            }
+
+            if (selectedBuilding_ != null)
             {
                 Point topLeft = new Point(selectedBuilding_.X * tileSize_ - lookLocation_.X, selectedBuilding_.Y * tileSize_ - lookLocation_.Y);
                 Size buildingSize = new Size(selectedBuilding_.Width * tileSize_, selectedBuilding_.Height * tileSize_);
