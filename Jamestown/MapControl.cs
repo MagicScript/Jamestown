@@ -164,11 +164,6 @@ namespace Jamestown
             InitializeComponent();
         }
 
-        private PointF ToClient(SharpDX.Vector3 v)
-        {
-            return new PointF(v.X * 10.0f - lookLocation_.X, v.Z * 10.0f - lookLocation_.Y);
-        }
-
         protected override void OnPaint(PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
