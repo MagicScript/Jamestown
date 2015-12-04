@@ -373,11 +373,12 @@ namespace Jamestown
                 {
                     if (OnDrawArea != null)
                     {
-                        int left = Math.Min(selectedAreaStart_.X, selectedAreaEnd_.X);
-                        int top = Math.Min(selectedAreaStart_.Y, selectedAreaEnd_.Y);
-                        int width = Math.Abs(selectedAreaStart_.X - selectedAreaEnd_.X);
-                        int height = Math.Abs(selectedAreaStart_.Y - selectedAreaEnd_.Y);
-                        OnDrawArea(left, top, width, height);
+                        int left = Math.Max(Math.Min(selectedAreaStart_.X, selectedAreaEnd_.X), 0);
+                        int top = Math.Max(Math.Min(selectedAreaStart_.Y, selectedAreaEnd_.Y), 0);
+                        int right = Math.Min(Math.Max(selectedAreaStart_.X, selectedAreaEnd_.X), map_.Width);
+                        int bottom = Math.Min(Math.Max(selectedAreaStart_.Y, selectedAreaEnd_.Y), map_.Height);
+
+                        OnDrawArea(left, top, right - left, bottom - top);
                     }
                 }
                 selectingArea_ = false;
