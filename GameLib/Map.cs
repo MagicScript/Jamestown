@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace GameLib
 {
@@ -10,14 +11,7 @@ namespace GameLib
     {
         Plain,
         Forest,
-        Swamp,
         Water
-    }
-
-    public enum TreeType
-    {
-        None,
-        Oak
     }
 
     public class Map
@@ -25,25 +19,44 @@ namespace GameLib
         private class Section
         {
             private LandType[,] landTypes_;
-            private TreeType[,] treeTypes_;
+            private Tree[,] treeTypes_;
             private int[,] heights_;
             private int width_;
             private int height_;
 
-            internal Section(int width, int height, int heightSmoothCount, int smoothCount)
+            internal Section(int width, int height, int heightSmoothCount, int smoothCount, TreeManager treeManager)
             {
                 width_ = width;
                 height_ = height;
                 landTypes_ = new LandType[width, height];
-                treeTypes_ = new TreeType[width, height];
+                treeTypes_ = new Tree[width, height];
                 heights_ = new int[width, height];
 
+                int numLandTypes = Enum.GetNames(typeof(LandType)).Length;
+
                 Random R = new Random();
+
+                var data = new []
+                {
+                    new { X = R.Next(width), Y = R.Next(height), Type = 0 },
+                    new { X = R.Next(width), Y = R.Next(height), Type = 1 },
+                    new { X = R.Next(width), Y = R.Next(height), Type = 2 },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) }
+                };
+
                 for (int y = 0; y < height; ++y)
                 {
                     for (int x = 0; x < width; ++x)
                     {
-                        if (x < 5 || y < 5 || x >= width - 5 || y >= height - 5)
+
+                        if (x < 50 || y < 50 || x >= width - 50 || y >= height - 50)
                         {
                             heights_[x, y] = -R.Next(255);
                         }
@@ -53,7 +66,6 @@ namespace GameLib
 
                             heights_[x, y] = R.Next(120);
                         }
-                        treeTypes_[x, y] = TreeType.None;
                     }
                 }
 
@@ -77,19 +89,21 @@ namespace GameLib
                 {
                     for (int x = 0; x < width; ++x)
                     {
-                        int myHeight = GetHeight(x, y);
-                        if (myHeight <= 0)
+                        double[] weights = new double[numLandTypes];
+                        for (int i = 0; i < data.Length; ++i)
                         {
-                            landTypes_[x, y] = LandType.Water;
+                            if (data[i].X == x && data[i].Y == y)
+                            {
+                                weights[data[i].Type] += 1.0;
+                            }
+                            else
+                            {
+                                weights[data[i].Type] += 1.0 / Math.Sqrt(Math.Pow(data[i].X - x, 2) + Math.Pow(data[i].Y - y, 2));
+                            }
                         }
-                        else if (myHeight < 24)
-                        {
-                            landTypes_[x, y] = (LandType)R.Next(3);
-                        }
-                        else
-                        {
-                            landTypes_[x, y] = (LandType)R.Next(2);
-                        }
+
+                        int max = weights.MaxElementIndex();
+                        landTypes_[x, y] = (LandType)max;
                     }
                 }
                 for (int i = 0; i < smoothCount; ++i)
@@ -101,13 +115,13 @@ namespace GameLib
                     {
                         if(landTypes_[x,y] == LandType.Forest)
                         {
-                            if (R.NextDouble() <= 0.15)
-                                treeTypes_[x, y] = TreeType.Oak;
+                            if (R.NextDouble() <= 0.005)
+                                treeTypes_[x, y] = treeManager.GenerateTree(R);
                         }
                         else if(landTypes_[x,y] == LandType.Plain)
                         {
-                            if (R.NextDouble() <= 0.01)
-                                treeTypes_[x, y] = TreeType.Oak;
+                            if (R.NextDouble() <= 0.001)
+                                treeTypes_[x, y] = treeManager.GenerateTree(R);
                         }
                     }
                 }
@@ -172,11 +186,6 @@ namespace GameLib
                 return (LandType)maxIndex;
             }
 
-            private TreeType AverageTreeType(int x, int y)
-            {
-                return TreeType.None;
-            }
-
             private int AverageHeight(int x, int y)
             {
                 double sum = 0;
@@ -210,7 +219,7 @@ namespace GameLib
                 return landTypes_[x, y];
             }
 
-            internal TreeType GetTree(int x, int y)
+            internal Tree GetTree(int x, int y)
             {
                 return treeTypes_[x, y];
             }
@@ -222,7 +231,7 @@ namespace GameLib
 
             internal void RemoveTree(int x, int y)
             {
-                treeTypes_[x, y] = TreeType.None;
+                treeTypes_[x, y] = null;
             }
         }
 
@@ -231,11 +240,11 @@ namespace GameLib
         private Section singleSection;
 
 
-        public Map(int width, int height, int heightSmoothCount, int smoothCount)
+        internal Map(int width, int height, int heightSmoothCount, int smoothCount, TreeManager treeManager)
         {
             Width = width;
             Height = height;
-            singleSection = new Section(width, height, heightSmoothCount, smoothCount);
+            singleSection = new Section(width, height, heightSmoothCount, smoothCount, treeManager);
         }
 
 
@@ -244,7 +253,7 @@ namespace GameLib
             return singleSection.GetType(x, y);
         }
 
-        public TreeType GetTree(int x, int y)
+        public Tree GetTree(int x, int y)
         {
             return singleSection.GetTree(x, y);
         }

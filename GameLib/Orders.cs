@@ -95,7 +95,7 @@ namespace GameLib
             {
                 for(int j = Y; j < Y + Height; ++j)
                 {
-                    if(Settlement.Map.GetTree(i, j) != TreeType.None)
+                    if(Settlement.Map.GetTree(i, j) != null)
                     {
                         Settlement.Map.RemoveTree(i, j);
                         if (--workLeft == 0)
@@ -117,7 +117,7 @@ namespace GameLib
             {
                 for (int j = Y; j < Y + Height; ++j)
                 {
-                    if (Settlement.Map.GetTree(i, j) != TreeType.None)
+                    if (Settlement.Map.GetTree(i, j) != null)
                     {
                         ++workToDo;
                     }

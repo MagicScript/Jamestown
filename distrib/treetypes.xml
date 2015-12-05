@@ -1,0 +1,29 @@
+<treetypes>
+  <treetype>
+    <name>Green Ash</name>
+    <mature_height>70</mature_height>
+    <mature_canopy>25</mature_canopy>
+    <mature_diameter>1.5</mature_diameter>
+    <growth_rate>2.5</growth_rate>
+    <type>Leaf</type>
+    <fall_color>FDBD32</fall_color>
+  </treetype>
+  <treetype>
+    <name>Beech</name>
+    <mature_height>70</mature_height>
+    <mature_canopy>40</mature_canopy>
+    <mature_diameter>3</mature_diameter>
+    <growth_rate>1</growth_rate>
+    <type>Leaf</type>
+    <fall_color>CAB364</fall_color>
+  </treetype>
+  <treetype>
+    <name>River Birch</name>
+    <mature_height>70</mature_height>
+    <mature_diameter>3</mature_diameter>
+    <mature_canopy>60</mature_canopy>
+    <growth_rate>1.5</growth_rate>
+    <type>Leaf</type>
+    <fall_color>FBDD29</fall_color>
+  </treetype>
+</treetypes>

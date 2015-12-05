@@ -147,7 +147,7 @@ namespace Jamestown
             }
         }
 
-        private Brush[] tileColors = new Brush[4] { Brushes.YellowGreen, Brushes.DarkGreen, Brushes.SaddleBrown, Brushes.Blue };
+        private Brush[] tileColors = new Brush[3] { Brushes.YellowGreen, Brushes.DarkGreen, Brushes.Blue };
 
         private Point mouseDownPt_;
         private Point mouseOverTile_;
@@ -162,6 +162,9 @@ namespace Jamestown
         public MapControl()
         {
             InitializeComponent();
+
+            if (tileColors.Length != Enum.GetNames(typeof(LandType)).Length)
+                throw new Exception("Mismatched land types and colors");
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -230,11 +233,11 @@ namespace Jamestown
                     Point topLeft = new Point(i * tileSize_ - lookLocation_.X, top);
                     if (mode_ == MapMode.Terrain)
                     {
-                        TreeType type = map_.GetTree(i, j);
-                        if(type == TreeType.Oak)
+                        Tree tree = map_.GetTree(i, j);
+                        if(tree != null)
                         {
-                            RectangleF rect = new RectangleF(topLeft, new Size(5 * tileSize_, 5 * tileSize_));
-                            rect.Offset(-2.5f * tileSize_, -2.5f * tileSize_);
+                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize * tileSize_, tree.CanopySize * tileSize_));
+                            rect.Offset(-tree.CanopySize * tileSize_ * 0.5f, -tree.CanopySize * tileSize_ * 0.5f);
                             e.Graphics.FillEllipse(Brushes.Green, rect);
                         }
                     }

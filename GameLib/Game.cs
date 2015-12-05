@@ -8,6 +8,8 @@ namespace GameLib
 {
     public class Game
     {
+        TreeManager treeManager = new TreeManager();
+
         private List<Settlement> settlements_ = new List<Settlement>();
         public IEnumerable<Settlement> Settlements
         {
@@ -16,7 +18,10 @@ namespace GameLib
 
         public Game()
         {
-            settlements_.Add(new Settlement("Jamestown", new Map(1000, 1000, 10, 5)));
+            Counter<string> badTags = new Counter<string>();
+            treeManager.LoadTreeTypesFromFile("treetypes.xml", badTags);
+
+            settlements_.Add(new Settlement("Jamestown", new Map(1000, 1000, 10, 5, treeManager)));
         }
 
         public void ProcessTurn()
