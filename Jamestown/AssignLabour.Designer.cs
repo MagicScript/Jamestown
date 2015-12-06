@@ -116,6 +116,7 @@
             this.Controls.Add(this.assignButton);
             this.Controls.Add(this.doneButton);
             this.Name = "AssignLabour";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AssignLabour";
             this.ResumeLayout(false);
             this.PerformLayout();

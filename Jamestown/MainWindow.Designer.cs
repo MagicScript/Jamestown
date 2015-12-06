@@ -231,35 +231,35 @@
             // xToolStripMenuItem9
             // 
             this.xToolStripMenuItem9.Name = "xToolStripMenuItem9";
-            this.xToolStripMenuItem9.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem9.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem9.Tag = "32";
             this.xToolStripMenuItem9.Text = "16x";
             // 
             // xToolStripMenuItem8
             // 
             this.xToolStripMenuItem8.Name = "xToolStripMenuItem8";
-            this.xToolStripMenuItem8.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem8.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem8.Tag = "16";
             this.xToolStripMenuItem8.Text = "8x";
             // 
             // xToolStripMenuItem7
             // 
             this.xToolStripMenuItem7.Name = "xToolStripMenuItem7";
-            this.xToolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem7.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem7.Tag = "8";
             this.xToolStripMenuItem7.Text = "4x";
             // 
             // xToolStripMenuItem6
             // 
             this.xToolStripMenuItem6.Name = "xToolStripMenuItem6";
-            this.xToolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem6.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem6.Tag = "4";
             this.xToolStripMenuItem6.Text = "2x";
             // 
             // xToolStripMenuItem5
             // 
             this.xToolStripMenuItem5.Name = "xToolStripMenuItem5";
-            this.xToolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem5.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem5.Tag = "1";
             this.xToolStripMenuItem5.Text = "1x";
             // 
@@ -303,6 +303,7 @@
             this.Controls.Add(this.mainStatus);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainWindow";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

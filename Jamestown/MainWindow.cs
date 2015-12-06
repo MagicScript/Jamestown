@@ -40,13 +40,19 @@ namespace Jamestown
         {
             if(settlementInspector_.CurrentAction == ActionType.PlaceChopZone)
             {
-                settlement_.AddOrder(new GameLib.ClearTreesOrder(settlement_, x, y, width, height));
+                GameLib.ZonedOrder newOrder = new GameLib.ClearTreesOrder(settlement_, x, y, width, height);
+                settlement_.AddOrder(newOrder);
                 settlementInspector_.Update();
+                mainMap.SelectedZone = newOrder;
+                DoSelect(null, newOrder);
             }
             else if(settlementInspector_.CurrentAction == ActionType.PlaceHuntZone)
             {
-                settlement_.AddOrder(new GameLib.HuntOrder(settlement_, x, y, width, height));
+                GameLib.ZonedOrder newOrder = new GameLib.HuntOrder(settlement_, x, y, width, height);
+                settlement_.AddOrder(newOrder);
                 settlementInspector_.Update();
+                mainMap.SelectedZone = newOrder;
+                DoSelect(null, newOrder);
             }
             UpdateSelectionText();
         }
@@ -110,6 +116,9 @@ namespace Jamestown
         {
             game_.ProcessTurn();
             mainMap.UpdateTreeMap();
+
+            if (zonedOrderInspector.Visible && zonedOrderInspector.Order.GetWorkLeft() <= 0)
+                DoSelect(null, null);
         }
 
 
