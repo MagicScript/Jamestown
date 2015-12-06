@@ -116,6 +116,13 @@ namespace GameLib
     class TreeManager
     {
         List<TreeType> treeTypes_ = new List<TreeType>();
+        
+        public float MaxCanopySize { get; private set; }
+
+        public TreeManager()
+        {
+            MaxCanopySize = 1.0f;
+        }
 
         public void LoadTreeTypesFromFile(string filename, Counter<string> badTags)
         {
@@ -194,6 +201,10 @@ namespace GameLib
                     break;
                 }
             }
+
+            if (matureCanopy > MaxCanopySize)
+                MaxCanopySize = matureCanopy;
+
             return new TreeType(name, type, matureHeight, matureDiameter, matureCanopy, growthRate, fallColor);
         }
     }

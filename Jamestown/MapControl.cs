@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using GameLib;
+using System.Drawing.Imaging;
 
 namespace Jamestown
 {
@@ -70,7 +71,8 @@ namespace Jamestown
                 {
                     settlement_ = value;
                     map_ = settlement_.Map;
-                    Invalidate();
+                    UpdateBaseMap();
+                    UpdateTreeMap();
                 }
             }
         }
@@ -159,12 +161,20 @@ namespace Jamestown
         private Point selectedAreaStart_;
         private Point selectedAreaEnd_;
 
+        private Bitmap basicLand_;
+        private Bitmap treeLand_;
+
         public MapControl()
         {
             InitializeComponent();
 
             if (tileColors.Length != Enum.GetNames(typeof(LandType)).Length)
                 throw new Exception("Mismatched land types and colors");
+        }
+
+        public void NewTurn()
+        {
+            UpdateTreeMap();
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -177,42 +187,9 @@ namespace Jamestown
             int tileHeight = ClientSize.Height / tileSize_;
             int startX = Math.Max(lookLocation_.X / tileSize_, 0);
             int startY = Math.Max(lookLocation_.Y / tileSize_, 0);
-            int endX = Math.Min(startX + tileWidth+1, map_.Width);
-            int endY = Math.Min(startY + tileHeight+1, map_.Height);
 
-            Size size = new Size(tileSize_, tileSize_);
-            for(int j = startY; j < endY; ++j)
-            {
-                int top = j * tileSize_ - lookLocation_.Y;
-
-                for (int i = startX; i < endX; ++i)
-                {
-                    Point topLeft = new Point(i * tileSize_ - lookLocation_.X, top);
-                    if(mode_ == MapMode.Height)
-                    { 
-                        int height = map_.GetHeight(i, j);
-                        if(height < 0)
-                        {
-                            using (Brush brush = new SolidBrush(Color.FromArgb(0, 0, 255 + height)))
-                            {
-                                e.Graphics.FillRectangle(brush, new Rectangle(topLeft, size));
-                            }
-                        }
-                        else
-                        {
-                            using (Brush brush = new SolidBrush(Color.FromArgb(0, height, 0)))
-                            {
-                                e.Graphics.FillRectangle(brush, new Rectangle(topLeft, size));
-                            }
-                        }
-                    }
-                    else
-                    {
-                        LandType type = map_.GetType(i, j);
-                        e.Graphics.FillRectangle(tileColors[(int)type], new Rectangle(topLeft, size));
-                    }
-                }
-            }
+            //Draw the background.
+            DrawBitmap(e.Graphics, basicLand_, tileWidth, tileHeight, startX, startY, false);
 
             foreach(Building building in settlement_.Buildings)
             {
@@ -224,25 +201,8 @@ namespace Jamestown
                 }
             }
 
-            for (int j = startY; j < endY; ++j)
-            {
-                int top = j * tileSize_ - lookLocation_.Y;
-
-                for (int i = startX; i < endX; ++i)
-                {
-                    Point topLeft = new Point(i * tileSize_ - lookLocation_.X, top);
-                    if (mode_ == MapMode.Terrain)
-                    {
-                        Tree tree = map_.GetTree(i, j);
-                        if(tree != null)
-                        {
-                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize * tileSize_, tree.CanopySize * tileSize_));
-                            rect.Offset(-tree.CanopySize * tileSize_ * 0.5f, -tree.CanopySize * tileSize_ * 0.5f);
-                            e.Graphics.FillEllipse(Brushes.Green, rect);
-                        }
-                    }
-                }
-            }
+            //Draw the trees.
+            DrawBitmap(e.Graphics, treeLand_, tileWidth, tileHeight, startX, startY, true);
 
             if (selectedBuilding_ != null)
             {
@@ -255,7 +215,7 @@ namespace Jamestown
             foreach (var order in settlement_.Orders)
             {
                 ZonedOrder zo = order as ZonedOrder;
-                if(zo != null)
+                if (zo != null)
                 {
                     DrawArea(e.Graphics, zo.X, zo.Y, zo.Width, zo.Height, zo.Color, zo == selectedZone_);
                 }
@@ -269,6 +229,14 @@ namespace Jamestown
                 int height = Math.Abs(selectedAreaStart_.Y - selectedAreaEnd_.Y);
                 DrawArea(e.Graphics, left, top, width, height, selectAreaColor_, false);
             }
+        }
+
+        private void DrawBitmap(Graphics G, Image image, int tileWidth, int tileHeight, int startX, int startY, bool useTransparent)
+        {
+            Rectangle sourceRect = new Rectangle(startX, startY, tileWidth, tileHeight);
+            Rectangle dstRect = new Rectangle(new Point(startX * tileSize_ - lookLocation_.X, startY * tileSize_ - lookLocation_.Y), new Size(tileWidth * tileSize_, tileHeight * tileSize_));
+
+            G.DrawImage(image, dstRect, sourceRect, GraphicsUnit.Pixel);
         }
 
         private static void DrawSelection(Graphics G, Rectangle rect)
@@ -392,6 +360,49 @@ namespace Jamestown
         private Point ClientToTile(Point p)
         {
             return new Point((lookLocation_.X + p.X) / tileSize_, (lookLocation_.Y + p.Y) / tileSize_);
+        }
+
+        private void UpdateBaseMap()
+        {
+            basicLand_ = new Bitmap(map_.Width, map_.Height);
+
+            using (Graphics G = Graphics.FromImage(basicLand_))
+            {
+                for(int y = 0; y < map_.Height; ++y)
+                {
+                    for(int x = 0; x < map_.Width; ++x)
+                    {
+                        G.FillRectangle(tileColors[(int)map_.GetType(x, y)], new Rectangle(x, y, 1, 1));
+                    }
+                }
+            }
+
+
+            Invalidate();
+        }
+
+        public void UpdateTreeMap()
+        {
+            treeLand_ = new Bitmap(map_.Width, map_.Height, PixelFormat.Format32bppPArgb);
+            using (Graphics G = Graphics.FromImage(treeLand_))
+            {
+                for (int y = 0; y < map_.Height; ++y)
+                {
+                    for (int x = 0; x < map_.Width; ++x)
+                    {
+                        Point topLeft = new Point(x, y);
+                        Tree tree = map_.GetTree(x, y);
+                        if (tree != null)
+                        {
+                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize, tree.CanopySize));
+                            rect.Offset(-tree.CanopySize * 0.5f, -tree.CanopySize * 0.5f);
+                            G.FillEllipse(Brushes.Green, rect);
+                        }
+                    }
+                }
+            }
+
+            Invalidate();
         }
     }
 }

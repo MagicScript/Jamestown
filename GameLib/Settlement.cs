@@ -33,7 +33,6 @@ namespace GameLib
         {
             Name = name;
             Map = map;
-            buildings_.Add(new Building(50, 50, 20, 20, 1));
 
             persons_.Add(new Person("Henry", "Adling", PersonType.Gentleman));
             persons_.Add(new Person("Jeremy", "Alicock", PersonType.Gentleman));

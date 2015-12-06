@@ -24,107 +24,126 @@ namespace GameLib
             private int width_;
             private int height_;
 
+            private List<Tree>[,] trees_;
+
             internal Section(int width, int height, int heightSmoothCount, int smoothCount, TreeManager treeManager)
             {
                 width_ = width;
                 height_ = height;
                 landTypes_ = new LandType[width, height];
                 treeTypes_ = new Tree[width, height];
+                trees_ = new List<Tree>[(int)Math.Ceiling(width / treeManager.MaxCanopySize), (int)Math.Ceiling(height / treeManager.MaxCanopySize)];
                 heights_ = new int[width, height];
 
                 int numLandTypes = Enum.GetNames(typeof(LandType)).Length;
 
                 Random R = new Random();
-
-                var data = new []
+                while(true)
                 {
-                    new { X = R.Next(width), Y = R.Next(height), Type = 0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 1 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 2 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) }
-                };
-
-                for (int y = 0; y < height; ++y)
-                {
-                    for (int x = 0; x < width; ++x)
+                    var data = new[]
                     {
+                        new { X = R.Next(width), Y = R.Next(height), Type = 0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 1 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 2 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes) }
+                    };
 
-                        if (x < 50 || y < 50 || x >= width - 50 || y >= height - 50)
-                        {
-                            heights_[x, y] = -R.Next(255);
-                        }
-                        else
-                        {
-                            int distToEdge = Math.Min(Math.Min(x, y), Math.Min(width - x, height - y));
-
-                            heights_[x, y] = R.Next(120);
-                        }
-                    }
-                }
-
-                int deepCount = 0;
-                while (deepCount < 5)
-                {
-                    int x = R.Next(width);
-                    int y = R.Next(height);
-                    if (x < 25 || y < 25 || x >= width - 25 || y >= height - 25)
+                    for (int y = 0; y < height; ++y)
                     {
-                        heights_[x, y] = -1000;
-                        ++deepCount;
-                    }
-                }
-
-                for (int i = 0; i < heightSmoothCount; ++i)
-                    SmoothHeight(R);
-                SmoothHeight(null);
-
-                for (int y = 0; y < height; ++y)
-                {
-                    for (int x = 0; x < width; ++x)
-                    {
-                        double[] weights = new double[numLandTypes];
-                        for (int i = 0; i < data.Length; ++i)
+                        for (int x = 0; x < width; ++x)
                         {
-                            if (data[i].X == x && data[i].Y == y)
+
+                            if (x < 50 || y < 50 || x >= width - 50 || y >= height - 50)
                             {
-                                weights[data[i].Type] += 1.0;
+                                heights_[x, y] = -R.Next(255);
                             }
                             else
                             {
-                                weights[data[i].Type] += 1.0 / Math.Sqrt(Math.Pow(data[i].X - x, 2) + Math.Pow(data[i].Y - y, 2));
+                                int distToEdge = Math.Min(Math.Min(x, y), Math.Min(width - x, height - y));
+
+                                heights_[x, y] = R.Next(120);
                             }
                         }
-
-                        int max = weights.MaxElementIndex();
-                        landTypes_[x, y] = (LandType)max;
                     }
-                }
-                for (int i = 0; i < smoothCount; ++i)
-                    Smooth();
 
-                for (int y = 0; y < height; ++y)
-                {
-                    for (int x = 0; x < width; ++x)
+                    int deepCount = 0;
+                    while (deepCount < 5)
                     {
-                        if(landTypes_[x,y] == LandType.Forest)
+                        int x = R.Next(width);
+                        int y = R.Next(height);
+                        if (x < 25 || y < 25 || x >= width - 25 || y >= height - 25)
                         {
-                            if (R.NextDouble() <= 0.005)
-                                treeTypes_[x, y] = treeManager.GenerateTree(R);
-                        }
-                        else if(landTypes_[x,y] == LandType.Plain)
-                        {
-                            if (R.NextDouble() <= 0.001)
-                                treeTypes_[x, y] = treeManager.GenerateTree(R);
+                            heights_[x, y] = -1000;
+                            ++deepCount;
                         }
                     }
+
+                    //for (int i = 0; i < heightSmoothCount; ++i)
+                    //    SmoothHeight(R);
+                    //SmoothHeight(null);
+                    int[] counts = new int[numLandTypes];
+                    for (int y = 0; y < height; ++y)
+                    {
+                        for (int x = 0; x < width; ++x)
+                        {
+                            double[] weights = new double[numLandTypes];
+                            for (int i = 0; i < data.Length; ++i)
+                            {
+                                if (data[i].X == x && data[i].Y == y)
+                                {
+                                    weights[data[i].Type] += 1.0;
+                                }
+                                else
+                                {
+                                    weights[data[i].Type] += 1.0 / Math.Sqrt(Math.Pow(data[i].X - x, 2) + Math.Pow(data[i].Y - y, 2));
+                                }
+                            }
+
+                            int max = weights.MaxElementIndex();
+                            landTypes_[x, y] = (LandType)max;
+
+                            ++counts[max];
+                        }
+                    }
+
+                    //for (int i = 0; i < smoothCount; ++i)
+                    //    Smooth();
+
+                    int treeCount = 0;
+                    for (int y = 0; y < height; ++y)
+                    {
+                        for (int x = 0; x < width; ++x)
+                        {
+                            if (landTypes_[x, y] == LandType.Forest)
+                            {
+                                if (R.NextDouble() <= 0.002)
+                                {
+                                    treeTypes_[x, y] = treeManager.GenerateTree(R);
+                                    ++treeCount;
+                                }
+                            }
+                            else if (landTypes_[x, y] == LandType.Plain)
+                            {
+                                if (R.NextDouble() <= 0.0001)
+                                {
+                                    treeTypes_[x, y] = treeManager.GenerateTree(R);
+                                    ++treeCount;
+                                }
+                            }
+                        }
+                    }
+
+                    if (counts[(int)LandType.Water] < 0.25 * width * height && counts[(int)LandType.Forest] < 0.5 * width * height)
+                        break;
                 }
+                int asdf = 0;
             }
 
             private int Gaussian(Random R, int mean, int stdDev)

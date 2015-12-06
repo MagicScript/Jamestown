@@ -109,7 +109,7 @@ namespace Jamestown
         private void endTurnButton__Click(object sender, EventArgs e)
         {
             game_.ProcessTurn();
-            mainMap.Refresh();
+            mainMap.UpdateTreeMap();
         }
 
 
