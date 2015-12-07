@@ -164,12 +164,16 @@ namespace Jamestown
         private Bitmap basicLand_;
         private Bitmap treeLand_;
 
+        private Image shipImage_;
+
         public MapControl()
         {
             InitializeComponent();
 
             if (tileColors.Length != Enum.GetNames(typeof(LandType)).Length)
                 throw new Exception("Mismatched land types and colors");
+
+            shipImage_ = Image.FromFile("three_mast.png");
         }
 
         public void NewTurn()
@@ -210,6 +214,12 @@ namespace Jamestown
                 Size buildingSize = new Size(selectedBuilding_.Width * tileSize_, selectedBuilding_.Height * tileSize_);
                 Rectangle rect = new Rectangle(topLeft, buildingSize);
                 DrawSelection(e.Graphics, rect);
+            }
+
+            foreach(var ship in settlement_.ShipsInPort)
+            {
+                Point topLeft = new Point(ship.X * tileSize_ - lookLocation_.X, ship.Y * tileSize_ - lookLocation_.Y);
+                e.Graphics.DrawImage(shipImage_, topLeft.X, topLeft.Y, shipImage_.Width / 4, shipImage_.Height/4);
             }
 
             foreach (var order in settlement_.Orders)

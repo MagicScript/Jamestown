@@ -29,10 +29,17 @@ namespace GameLib
             get { return persons_.AsEnumerable(); }
         }
 
+        public List<Ship> ships_ = new List<Ship>();
+        public IEnumerable<Ship> ShipsInPort
+        {
+            get { return ships_.AsEnumerable(); }
+        }
+
         public Settlement(string name, Map map)
         {
             Name = name;
             Map = map;
+            ships_.Add(new Ship(0, 900, ShipType.ThreeMast));
 
             persons_.Add(new Person("Henry", "Adling", PersonType.Gentleman));
             persons_.Add(new Person("Jeremy", "Alicock", PersonType.Gentleman));
