@@ -21,7 +21,7 @@ namespace GameLib
             Counter<string> badTags = new Counter<string>();
             treeManager.LoadTreeTypesFromFile("treetypes.xml", badTags);
 
-            settlements_.Add(new Settlement("Jamestown", new Map(1000, 1000, treeManager)));
+            settlements_.Add(new Settlement("Jamestown", new Map(5000, 5000, treeManager)));
         }
 
         public void ProcessTurn()

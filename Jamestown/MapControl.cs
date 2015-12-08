@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using GameLib;
 using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace Jamestown
 {
@@ -149,7 +150,8 @@ namespace Jamestown
             }
         }
 
-        private Brush[] tileColors = new Brush[3] { Brushes.YellowGreen, Brushes.DarkGreen, Brushes.Blue };
+        private Color[] tileColors_ = new Color[3] { Color.YellowGreen, Color.DarkGreen, Color.Blue };
+        private Brush[] tileBrushes_;
 
         private Point mouseDownPt_;
         private Point mouseOverTile_;
@@ -170,8 +172,14 @@ namespace Jamestown
         {
             InitializeComponent();
 
-            if (tileColors.Length != Enum.GetNames(typeof(LandType)).Length)
+            if (tileColors_.Length != Enum.GetNames(typeof(LandType)).Length)
                 throw new Exception("Mismatched land types and colors");
+
+            tileBrushes_ = new Brush[tileColors_.Length];
+            for(int i = 0; i < tileColors_.Length; ++i)
+            {
+                tileBrushes_[i] = new SolidBrush(tileColors_[i]);
+            }
 
             shipImage_ = Image.FromFile("three_mast.png");
         }
@@ -375,18 +383,18 @@ namespace Jamestown
         private void UpdateBaseMap()
         {
             basicLand_ = new Bitmap(map_.Width, map_.Height);
+            BitmapData bitmapData = basicLand_.LockBits(new Rectangle(0, 0, map_.Width, map_.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppRgb);
 
-            using (Graphics G = Graphics.FromImage(basicLand_))
+            int[] row = new int[bitmapData.Stride/4];
+            for(int y = 0; y < map_.Height; ++y)
             {
-                for(int y = 0; y < map_.Height; ++y)
+                for(int x = 0; x < map_.Width; ++x)
                 {
-                    for(int x = 0; x < map_.Width; ++x)
-                    {
-                        G.FillRectangle(tileColors[(int)map_.GetType(x, y)], new Rectangle(x, y, 1, 1));
-                    }
+                    row[x] = tileColors_[(int)map_.GetType(x, y)].ToArgb();
                 }
+                Marshal.Copy(row, 0, bitmapData.Scan0 + y * bitmapData.Stride, bitmapData.Stride / 4);
             }
-
+            basicLand_.UnlockBits(bitmapData);
 
             Invalidate();
         }

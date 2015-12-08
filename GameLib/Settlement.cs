@@ -39,7 +39,7 @@ namespace GameLib
         {
             Name = name;
             Map = map;
-            ships_.Add(new Ship(0, 900, ShipType.ThreeMast));
+            ships_.Add(new Ship(0, map.Height - 150, ShipType.ThreeMast));
 
             persons_.Add(new Person("Henry", "Adling", PersonType.Gentleman));
             persons_.Add(new Person("Jeremy", "Alicock", PersonType.Gentleman));

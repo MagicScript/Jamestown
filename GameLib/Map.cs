@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Diagnostics;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 
 namespace GameLib
 {
@@ -134,8 +137,13 @@ namespace GameLib
                 width_ = width;
                 height_ = height;
 
-                int widthCount = width / 20;
-                int heightCount = height / 20;
+                int cellSize = 20;
+                double cellSpacing = cellSize;
+                double cellMultiplier = (cellSpacing - 0.5);
+                double cellBias = cellMultiplier * 0.5;
+
+                int widthCount = width / cellSize;
+                int heightCount = height / cellSize;
 
                 int numLandTypes = Enum.GetNames(typeof(LandType)).Length;
 
@@ -177,14 +185,14 @@ namespace GameLib
 
                     for (int i = 1; i < widthCount; ++i)
                     {
-                        linePoints[i] = new PointF((float)(R.NextDouble() * 19.5 - 9.75 + i * 20.0), 0.0f);
+                        linePoints[i] = new PointF((float)(R.NextDouble() * cellMultiplier - cellBias + i * cellSpacing), 0.0f);
 
                         edges[i - 1] = new Edge(linePoints[i - 1], linePoints[i], R, true);
                     }
                     edges[widthCount - 1] = new Edge(linePoints[widthCount - 1], linePoints[widthCount], R, true);
                     for (int y = 1; y <= heightCount; ++y)
                     {
-                        PointF bottomLeft = new PointF(0.0f, (float)(R.NextDouble() * 19.5 - 9.75 + y * 20.0));
+                        PointF bottomLeft = new PointF(0.0f, (float)(R.NextDouble() * cellMultiplier - cellBias + y * cellSpacing));
 
                         if (y == heightCount)
                             bottomLeft.Y = height;
@@ -193,7 +201,7 @@ namespace GameLib
                         PointF bottomRight = bottomLeft;
                         for (int x = 1; x <= widthCount; ++x)
                         {
-                            bottomRight = new PointF((float)(R.NextDouble() * 19.5 - 9.75 + x * 20.0), (float)(R.NextDouble() * 19.5 - 9.75 + y * 20.0));
+                            bottomRight = new PointF((float)(R.NextDouble() * cellMultiplier - cellBias + x * cellSpacing), (float)(R.NextDouble() * cellMultiplier - cellBias + y * cellSpacing));
 
                             if (x == widthCount)
                                 bottomRight.X = width;
@@ -248,14 +256,23 @@ namespace GameLib
 
                     landTypes_ = new LandType[width, height];
                     int[] counts = new int[numLandTypes];
+
+                    //We can't reasonably call GetPixel on the bitmap, that is much too slow.
+                    //We'll get the bytes themselves and examine them directly.
+                    BitmapData bitmapData = bitmap.LockBits(new Rectangle(0, 0, width, height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+                    int numBytes = bitmapData.Stride;
+                    byte[] row = new byte[numBytes];
                     for (int y = 0; y < width; ++y)
                     {
+                        Marshal.Copy(bitmapData.Scan0 + numBytes * y, row, 0, numBytes);
                         for (int x = 0; x < height; ++x)
                         {
-                            Color color = bitmap.GetPixel(x, y);
+
+                            //All the colors are solid, so we can expect their 8 upper bits are 1s.
+                            int color = (255<<24) | (((int)row[x * 3 + 2]) << 16) | (((int)row[x * 3 + 1]) << 8) | ((int)row[x * 3 + 0]);
                             for (int i = 0; i < numLandTypes; ++i)
                             {
-                                if (tileColors[i].Color.ToArgb() == color.ToArgb())
+                                if (tileColors[i].Color.ToArgb() == color)
                                 {
                                     landTypes_[x, y] = (LandType)i;
                                     ++counts[i];
@@ -264,6 +281,7 @@ namespace GameLib
                             }
                         }
                     }
+                    bitmap.UnlockBits(bitmapData);
 
                     if (counts[(int)LandType.Water] < 0.2 * width * height && counts[(int)LandType.Forest] < 0.5 * width * height && counts[(int)LandType.Plain] < 0.6 * width * height)
                         break;
