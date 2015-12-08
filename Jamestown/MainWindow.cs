@@ -27,6 +27,10 @@ namespace Jamestown
             mainMap.SelectedBuildingChanged += MainMap_SelectedBuildingChanged;
             mainMap.SelectedZoneChanged += MainMap_SelectedZoneChanged;
             mainMap.OnDrawArea += MainMap_OnSelectArea;
+            mainMap.OnVisibleAreaChanged += MainMap_OnVisibleAreaChanged;
+
+            miniMap.Map = mainMap.MapImage;
+            miniMap.OnSelectedAreaChange += MiniMap_OnSelectedAreaChange;
 
             settlementInspector_.Settlement = settlement_;
             settlementInspector_.Visible = true;
@@ -34,6 +38,16 @@ namespace Jamestown
             terrainLabel.Text = "None";
             UpdateSelectionText();
             DoSelect(null, null);
+        }
+
+        private void MiniMap_OnSelectedAreaChange(Rectangle selectedArea)
+        {
+            mainMap.VisibleArea = selectedArea;
+        }
+
+        private void MainMap_OnVisibleAreaChanged(Rectangle area)
+        {
+            miniMap.SelectedArea = area;
         }
 
         private void MainMap_OnSelectArea(int x, int y, int width, int height)

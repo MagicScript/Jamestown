@@ -31,12 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.mainMap = new Jamestown.MapControl();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.scrollPanel = new System.Windows.Forms.Panel();
-            this.zonedOrderInspector = new Jamestown.ZonedOrderInspector();
-            this.settlementInspector_ = new Jamestown.SettlementInspector();
-            this.buildingInspector_ = new Jamestown.BuildingInspector();
             this.endTurnButton_ = new System.Windows.Forms.Button();
             this.mainStatus = new System.Windows.Forms.StatusStrip();
             this.terrainLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -52,6 +48,11 @@
             this.xToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.xToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.xToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMap = new Jamestown.MapControl();
+            this.zonedOrderInspector = new Jamestown.ZonedOrderInspector();
+            this.settlementInspector_ = new Jamestown.SettlementInspector();
+            this.buildingInspector_ = new Jamestown.BuildingInspector();
+            this.miniMap = new Jamestown.MiniMap();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -89,21 +90,6 @@
             this.splitContainer1.SplitterDistance = 886;
             this.splitContainer1.TabIndex = 2;
             // 
-            // mainMap
-            // 
-            this.mainMap.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainMap.Location = new System.Drawing.Point(0, 0);
-            this.mainMap.LookLocation = new System.Drawing.Point(0, 0);
-            this.mainMap.Mode = Jamestown.MapMode.Terrain;
-            this.mainMap.Name = "mainMap";
-            this.mainMap.SelectAreaColor = System.Drawing.Color.AliceBlue;
-            this.mainMap.SelectedBuilding = null;
-            this.mainMap.SelectedZone = null;
-            this.mainMap.Settlement = null;
-            this.mainMap.Size = new System.Drawing.Size(886, 619);
-            this.mainMap.TabIndex = 0;
-            this.mainMap.TileSize = 16;
-            // 
             // splitContainer2
             // 
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -119,9 +105,10 @@
             // 
             // splitContainer2.Panel2
             // 
+            this.splitContainer2.Panel2.Controls.Add(this.miniMap);
             this.splitContainer2.Panel2.Controls.Add(this.endTurnButton_);
             this.splitContainer2.Size = new System.Drawing.Size(246, 619);
-            this.splitContainer2.SplitterDistance = 577;
+            this.splitContainer2.SplitterDistance = 330;
             this.splitContainer2.TabIndex = 0;
             // 
             // scrollPanel
@@ -133,51 +120,15 @@
             this.scrollPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.scrollPanel.Location = new System.Drawing.Point(0, 0);
             this.scrollPanel.Name = "scrollPanel";
-            this.scrollPanel.Size = new System.Drawing.Size(246, 577);
+            this.scrollPanel.Size = new System.Drawing.Size(246, 330);
             this.scrollPanel.TabIndex = 0;
-            // 
-            // zonedOrderInspector
-            // 
-            this.zonedOrderInspector.Location = new System.Drawing.Point(0, 3);
-            this.zonedOrderInspector.Name = "zonedOrderInspector";
-            this.zonedOrderInspector.Order = null;
-            this.zonedOrderInspector.Size = new System.Drawing.Size(243, 248);
-            this.zonedOrderInspector.TabIndex = 2;
-            this.zonedOrderInspector.Visible = false;
-            // 
-            // settlementInspector_
-            // 
-            this.settlementInspector_.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.settlementInspector_.AutoSize = true;
-            this.settlementInspector_.BackColor = System.Drawing.SystemColors.Control;
-            this.settlementInspector_.CurrentAction = Jamestown.ActionType.None;
-            this.settlementInspector_.Location = new System.Drawing.Point(3, 0);
-            this.settlementInspector_.Name = "settlementInspector_";
-            this.settlementInspector_.Settlement = null;
-            this.settlementInspector_.Size = new System.Drawing.Size(243, 170);
-            this.settlementInspector_.TabIndex = 1;
-            this.settlementInspector_.Visible = false;
-            // 
-            // buildingInspector_
-            // 
-            this.buildingInspector_.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.buildingInspector_.BackColor = System.Drawing.SystemColors.Control;
-            this.buildingInspector_.Building = null;
-            this.buildingInspector_.Location = new System.Drawing.Point(3, 0);
-            this.buildingInspector_.Name = "buildingInspector_";
-            this.buildingInspector_.Size = new System.Drawing.Size(240, 170);
-            this.buildingInspector_.TabIndex = 0;
-            this.buildingInspector_.Visible = false;
             // 
             // endTurnButton_
             // 
-            this.endTurnButton_.Dock = System.Windows.Forms.DockStyle.Fill;
             this.endTurnButton_.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.endTurnButton_.Location = new System.Drawing.Point(0, 0);
+            this.endTurnButton_.Location = new System.Drawing.Point(3, 250);
             this.endTurnButton_.Name = "endTurnButton_";
-            this.endTurnButton_.Size = new System.Drawing.Size(246, 38);
+            this.endTurnButton_.Size = new System.Drawing.Size(240, 32);
             this.endTurnButton_.TabIndex = 0;
             this.endTurnButton_.Text = "End Turn";
             this.endTurnButton_.UseVisualStyleBackColor = true;
@@ -293,6 +244,65 @@
             this.xToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
             this.xToolStripMenuItem.Text = "1x";
             // 
+            // mainMap
+            // 
+            this.mainMap.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.mainMap.Location = new System.Drawing.Point(0, 0);
+            this.mainMap.LookLocation = new System.Drawing.Point(0, 0);
+            this.mainMap.Mode = Jamestown.MapMode.Terrain;
+            this.mainMap.Name = "mainMap";
+            this.mainMap.SelectAreaColor = System.Drawing.Color.AliceBlue;
+            this.mainMap.SelectedBuilding = null;
+            this.mainMap.SelectedZone = null;
+            this.mainMap.Settlement = null;
+            this.mainMap.Size = new System.Drawing.Size(886, 619);
+            this.mainMap.TabIndex = 0;
+            this.mainMap.TileSize = 16;
+            // 
+            // zonedOrderInspector
+            // 
+            this.zonedOrderInspector.Location = new System.Drawing.Point(0, 3);
+            this.zonedOrderInspector.Name = "zonedOrderInspector";
+            this.zonedOrderInspector.Order = null;
+            this.zonedOrderInspector.Size = new System.Drawing.Size(243, 248);
+            this.zonedOrderInspector.TabIndex = 2;
+            this.zonedOrderInspector.Visible = false;
+            // 
+            // settlementInspector_
+            // 
+            this.settlementInspector_.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.settlementInspector_.AutoSize = true;
+            this.settlementInspector_.BackColor = System.Drawing.SystemColors.Control;
+            this.settlementInspector_.CurrentAction = Jamestown.ActionType.None;
+            this.settlementInspector_.Location = new System.Drawing.Point(3, 0);
+            this.settlementInspector_.Name = "settlementInspector_";
+            this.settlementInspector_.Settlement = null;
+            this.settlementInspector_.Size = new System.Drawing.Size(243, 170);
+            this.settlementInspector_.TabIndex = 1;
+            this.settlementInspector_.Visible = false;
+            // 
+            // buildingInspector_
+            // 
+            this.buildingInspector_.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.buildingInspector_.BackColor = System.Drawing.SystemColors.Control;
+            this.buildingInspector_.Building = null;
+            this.buildingInspector_.Location = new System.Drawing.Point(3, 0);
+            this.buildingInspector_.Name = "buildingInspector_";
+            this.buildingInspector_.Size = new System.Drawing.Size(240, 170);
+            this.buildingInspector_.TabIndex = 0;
+            this.buildingInspector_.Visible = false;
+            // 
+            // miniMap
+            // 
+            this.miniMap.Location = new System.Drawing.Point(2, 3);
+            this.miniMap.Map = null;
+            this.miniMap.Name = "miniMap";
+            this.miniMap.SelectedArea = new System.Drawing.Rectangle(0, 0, 0, 0);
+            this.miniMap.Size = new System.Drawing.Size(243, 243);
+            this.miniMap.TabIndex = 1;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -347,6 +357,7 @@
         private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem xToolStripMenuItem9;
+        private MiniMap miniMap;
     }
 }
 

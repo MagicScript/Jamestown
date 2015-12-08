@@ -72,6 +72,12 @@
     <Compile Include="MapControl.Designer.cs">
       <DependentUpon>MapControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="MiniMap.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MiniMap.Designer.cs">
+      <DependentUpon>MiniMap.cs</DependentUpon>
+    </Compile>
     <Compile Include="PersonList.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -110,6 +116,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="MapControl.resx">
       <DependentUpon>MapControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MiniMap.resx">
+      <DependentUpon>MiniMap.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PersonList.resx">
       <DependentUpon>PersonList.cs</DependentUpon>

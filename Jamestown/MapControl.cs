@@ -11,6 +11,7 @@ using System.Diagnostics;
 using GameLib;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace Jamestown
 {
@@ -27,11 +28,13 @@ namespace Jamestown
         public delegate void SelectBuilding(Building b);
         public delegate void SelectZone(ZonedOrder order);
         public delegate void FinishedDrawArea(int x, int y, int width, int height);
+        public delegate void VisibleAreaChanged(Rectangle area);
 
         public event MouseOver MouseOverChanged;
         public event SelectBuilding SelectedBuildingChanged;
         public event SelectZone SelectedZoneChanged;
         public event FinishedDrawArea OnDrawArea;
+        public event VisibleAreaChanged OnVisibleAreaChanged;
 
         private int tileSize_ = 16;
         public int TileSize
@@ -43,6 +46,11 @@ namespace Jamestown
                 {
                     tileSize_ = value;
                     Invalidate();
+
+                    if (OnVisibleAreaChanged != null)
+                    {
+                        OnVisibleAreaChanged(VisibleArea);
+                    }
                 }
             }
         }
@@ -57,6 +65,11 @@ namespace Jamestown
                 {
                     lookLocation_ = value;
                     Invalidate();
+
+                    if (OnVisibleAreaChanged != null)
+                    {
+                        OnVisibleAreaChanged(VisibleArea);
+                    }
                 }
             }
         }
@@ -150,6 +163,30 @@ namespace Jamestown
             }
         }
 
+        public Rectangle VisibleArea
+        {
+            get
+            {
+                int tileWidth = ClientSize.Width / tileSize_;
+                int tileHeight = ClientSize.Height / tileSize_;
+                return new Rectangle(lookLocation_.X / tileSize_, lookLocation_.Y / tileSize_, tileWidth, tileHeight);
+            }
+            set
+            {
+                lookLocation_.X = value.X * tileSize_;
+                lookLocation_.Y = value.Y * tileSize_;
+                Invalidate();
+            }
+        }
+
+        public Image MapImage
+        {
+            get
+            {
+                return basicLand_;
+            }
+        }
+
         private Color[] tileColors_ = new Color[3] { Color.YellowGreen, Color.DarkGreen, Color.Blue };
         private Brush[] tileBrushes_;
 
@@ -166,7 +203,7 @@ namespace Jamestown
         private Bitmap basicLand_;
         private Bitmap treeLand_;
 
-        private Image shipImage_;
+        private Image shipImage_ = null;
 
         public MapControl()
         {
@@ -181,7 +218,8 @@ namespace Jamestown
                 tileBrushes_[i] = new SolidBrush(tileColors_[i]);
             }
 
-            shipImage_ = Image.FromFile("three_mast.png");
+            if(File.Exists("three_mast.png"))
+                shipImage_ = Image.FromFile("three_mast.png");
         }
 
         public void NewTurn()
@@ -224,10 +262,13 @@ namespace Jamestown
                 DrawSelection(e.Graphics, rect);
             }
 
-            foreach(var ship in settlement_.ShipsInPort)
+            if(shipImage_ != null)
             {
-                Point topLeft = new Point(ship.X * tileSize_ - lookLocation_.X, ship.Y * tileSize_ - lookLocation_.Y);
-                e.Graphics.DrawImage(shipImage_, topLeft.X, topLeft.Y, shipImage_.Width / 4, shipImage_.Height/4);
+                foreach (var ship in settlement_.ShipsInPort)
+                {
+                    Point topLeft = new Point(ship.X * tileSize_ - lookLocation_.X, ship.Y * tileSize_ - lookLocation_.Y);
+                    e.Graphics.DrawImage(shipImage_, topLeft.X, topLeft.Y, shipImage_.Width / 4, shipImage_.Height / 4);
+                }
             }
 
             foreach (var order in settlement_.Orders)
@@ -312,6 +353,11 @@ namespace Jamestown
                 lookLocation_.Y -= e.Location.Y - startDragPt_.Y;
                 startDragPt_ = e.Location;
                 Invalidate();
+
+                if(OnVisibleAreaChanged != null)
+                {
+                    OnVisibleAreaChanged(VisibleArea);
+                }
             }
             else if(selectingArea_)
             {
