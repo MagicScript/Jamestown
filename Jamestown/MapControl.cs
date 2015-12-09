@@ -44,7 +44,13 @@ namespace Jamestown
             {
                 if(tileSize_ != value)
                 {
+                    double centerX = lookLocation_.X + ClientSize.Width / (double)tileSize_ * 0.5;
+                    double centerY = lookLocation_.Y + ClientSize.Height / (double)tileSize_ * 0.5;
+                    centerX = centerX * (value / (double)tileSize_);
+                    centerY = centerY * (value / (double)tileSize_);
                     tileSize_ = value;
+                    lookLocation_.X = (int)(centerX - ClientSize.Width / (double)tileSize_ * 0.5);
+                    lookLocation_.Y = (int)(centerY - ClientSize.Height / (double)tileSize_ * 0.5);
                     Invalidate();
 
                     if (OnVisibleAreaChanged != null)
@@ -233,8 +239,8 @@ namespace Jamestown
             if (map_ == null)
                 return;
 
-            int tileWidth = ClientSize.Width / tileSize_;
-            int tileHeight = ClientSize.Height / tileSize_;
+            int tileWidth = (int)Math.Ceiling(ClientSize.Width / (double)tileSize_) + 1;
+            int tileHeight = (int)Math.Ceiling(ClientSize.Height / (double)tileSize_) + 1;
             int startX = Math.Max(lookLocation_.X / tileSize_, 0);
             int startY = Math.Max(lookLocation_.Y / tileSize_, 0);
 
@@ -252,7 +258,34 @@ namespace Jamestown
             }
 
             //Draw the trees.
-            DrawBitmap(e.Graphics, treeLand_, tileWidth, tileHeight, startX, startY, true);
+            //DrawBitmap(e.Graphics, treeLand_, tileWidth, tileHeight, startX, startY, true);
+            int treeStartX = Math.Max(startX - TreeType.MaxCanopySize, 0);
+            int treeStartY = Math.Max(startY - TreeType.MaxCanopySize, 0);
+            int treeEndX = Math.Min(startX + tileWidth + TreeType.MaxCanopySize, map_.Width);
+            int treeEndY = Math.Min(startY + tileHeight + TreeType.MaxCanopySize, map_.Height);
+            for (int y = treeStartY; y < treeEndY; ++y)
+            {
+                for (int x = treeStartX; x < treeEndX; ++x)
+                {
+                    Point topLeft = new Point(x * tileSize_ - lookLocation_.X, y * tileSize_ - lookLocation_.Y);
+                    Tree tree = map_.GetTree(x, y);
+                    if (tree != null)
+                    {
+                        if (tree.IsStump)
+                        {
+                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.Diameter * tileSize_, tree.Diameter * tileSize_));
+                            rect.Offset(-tree.Diameter * tileSize_ * 0.5f, -tree.Diameter * tileSize_ * 0.5f);
+                            e.Graphics.FillEllipse(Brushes.SaddleBrown, rect);
+                        }
+                        else
+                        {
+                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize * tileSize_, tree.CanopySize * tileSize_));
+                            rect.Offset(-tree.CanopySize * tileSize_ * 0.5f, -tree.CanopySize * tileSize_ * 0.5f);
+                            e.Graphics.FillEllipse(Brushes.Green, rect);
+                        }
+                    }
+                }
+            }
 
             if (selectedBuilding_ != null)
             {
@@ -447,6 +480,7 @@ namespace Jamestown
 
         public void UpdateTreeMap()
         {
+#if false
             treeLand_ = new Bitmap(map_.Width, map_.Height, PixelFormat.Format32bppPArgb);
             using (Graphics G = Graphics.FromImage(treeLand_))
             {
@@ -458,14 +492,24 @@ namespace Jamestown
                         Tree tree = map_.GetTree(x, y);
                         if (tree != null)
                         {
-                            RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize, tree.CanopySize));
-                            rect.Offset(-tree.CanopySize * 0.5f, -tree.CanopySize * 0.5f);
-                            G.FillEllipse(Brushes.Green, rect);
+                            if (tree.Stump)
+                            {
+                                RectangleF rect = new RectangleF(topLeft, new SizeF(tree.Diameter, tree.Diameter));
+                                rect.Offset(-tree.Diameter * 0.5f, -tree.Diameter * 0.5f);
+                                G.FillEllipse(Brushes.Brown, rect);
+                            }
+                            else
+                            {
+                                RectangleF rect = new RectangleF(topLeft, new SizeF(tree.CanopySize, tree.CanopySize));
+                                rect.Offset(-tree.CanopySize * 0.5f, -tree.CanopySize * 0.5f);
+                                G.FillEllipse(Brushes.Green, rect);
+                            }
                         }
                     }
                 }
             }
 
+#endif
             Invalidate();
         }
     }

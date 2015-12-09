@@ -10,6 +10,7 @@ namespace Jamestown
     {
         None,
         PlaceChopZone,
+        PlaceCutLogsZone,
         PlaceHuntZone
     }
 

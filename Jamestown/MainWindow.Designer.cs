@@ -182,35 +182,35 @@
             // xToolStripMenuItem9
             // 
             this.xToolStripMenuItem9.Name = "xToolStripMenuItem9";
-            this.xToolStripMenuItem9.Size = new System.Drawing.Size(91, 22);
-            this.xToolStripMenuItem9.Tag = "32";
+            this.xToolStripMenuItem9.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem9.Tag = "16";
             this.xToolStripMenuItem9.Text = "16x";
             // 
             // xToolStripMenuItem8
             // 
             this.xToolStripMenuItem8.Name = "xToolStripMenuItem8";
-            this.xToolStripMenuItem8.Size = new System.Drawing.Size(91, 22);
-            this.xToolStripMenuItem8.Tag = "16";
+            this.xToolStripMenuItem8.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem8.Tag = "8";
             this.xToolStripMenuItem8.Text = "8x";
             // 
             // xToolStripMenuItem7
             // 
             this.xToolStripMenuItem7.Name = "xToolStripMenuItem7";
-            this.xToolStripMenuItem7.Size = new System.Drawing.Size(91, 22);
-            this.xToolStripMenuItem7.Tag = "8";
+            this.xToolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem7.Tag = "4";
             this.xToolStripMenuItem7.Text = "4x";
             // 
             // xToolStripMenuItem6
             // 
             this.xToolStripMenuItem6.Name = "xToolStripMenuItem6";
-            this.xToolStripMenuItem6.Size = new System.Drawing.Size(91, 22);
-            this.xToolStripMenuItem6.Tag = "4";
+            this.xToolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+            this.xToolStripMenuItem6.Tag = "2";
             this.xToolStripMenuItem6.Text = "2x";
             // 
             // xToolStripMenuItem5
             // 
             this.xToolStripMenuItem5.Name = "xToolStripMenuItem5";
-            this.xToolStripMenuItem5.Size = new System.Drawing.Size(91, 22);
+            this.xToolStripMenuItem5.Size = new System.Drawing.Size(152, 22);
             this.xToolStripMenuItem5.Tag = "1";
             this.xToolStripMenuItem5.Text = "1x";
             // 
@@ -258,6 +258,7 @@
             this.mainMap.Size = new System.Drawing.Size(886, 619);
             this.mainMap.TabIndex = 0;
             this.mainMap.TileSize = 16;
+            this.mainMap.VisibleArea = new System.Drawing.Rectangle(0, 0, 55, 38);
             // 
             // zonedOrderInspector
             // 
@@ -278,7 +279,7 @@
             this.settlementInspector_.Location = new System.Drawing.Point(3, 0);
             this.settlementInspector_.Name = "settlementInspector_";
             this.settlementInspector_.Settlement = null;
-            this.settlementInspector_.Size = new System.Drawing.Size(243, 170);
+            this.settlementInspector_.Size = new System.Drawing.Size(243, 326);
             this.settlementInspector_.TabIndex = 1;
             this.settlementInspector_.Visible = false;
             // 

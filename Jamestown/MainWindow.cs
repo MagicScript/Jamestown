@@ -60,6 +60,14 @@ namespace Jamestown
                 mainMap.SelectedZone = newOrder;
                 DoSelect(null, newOrder);
             }
+            else if (settlementInspector_.CurrentAction == ActionType.PlaceCutLogsZone)
+            {
+                GameLib.ZonedOrder newOrder = new GameLib.CutLogsOrder(settlement_, x, y, width, height);
+                settlement_.AddOrder(newOrder);
+                settlementInspector_.Update();
+                mainMap.SelectedZone = newOrder;
+                DoSelect(null, newOrder);
+            }
             else if(settlementInspector_.CurrentAction == ActionType.PlaceHuntZone)
             {
                 GameLib.ZonedOrder newOrder = new GameLib.HuntOrder(settlement_, x, y, width, height);
@@ -133,6 +141,8 @@ namespace Jamestown
 
             if (zonedOrderInspector.Visible && zonedOrderInspector.Order.GetWorkLeft() <= 0)
                 DoSelect(null, null);
+
+            settlementInspector_.BeginTurn();
         }
 
 

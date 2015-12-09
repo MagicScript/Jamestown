@@ -11,6 +11,12 @@ namespace GameLib
         public string Name { get; set; }
         public Map Map { get; private set; }
 
+        public Dictionary<string, float> materials_ = new Dictionary<string, float>();
+        public IEnumerable<KeyValuePair<string,float>> Materials
+        {
+            get { return materials_.AsEnumerable(); }
+        }
+
         private List<Building> buildings_ = new List<Building>();
         public IEnumerable<Building> Buildings
         {
@@ -179,6 +185,32 @@ namespace GameLib
                 }
             }
             orders_ = remaining;
+        }
+
+        internal bool HasMaterials(string what, float amount)
+        {
+            float total = 0.0f;
+            if (!materials_.TryGetValue(what, out total))
+                return false;
+            return total >= amount;
+        }
+
+        internal void AddMaterial(string what, float amount)
+        {
+            float total = 0.0f;
+            if (!materials_.TryGetValue(what, out total))
+                materials_.Add(what, amount);
+            else
+                materials_[what] = amount + total;
+        }
+
+        internal void RemoveMaterial(string what, float amount)
+        {
+            float total = 0.0f;
+            if (materials_.TryGetValue(what, out total) && total >= amount)
+                materials_[what] = total - amount;
+            else
+                throw new Exception("Cheater!");
         }
     }
 }

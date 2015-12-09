@@ -95,9 +95,14 @@ namespace GameLib
             {
                 for(int j = Y; j < Y + Height; ++j)
                 {
-                    if(Settlement.Map.GetTree(i, j) != null)
+                    Tree tree = Settlement.Map.GetTree(i, j);
+                    if (tree != null && !tree.IsStump)
                     {
-                        Settlement.Map.RemoveTree(i, j);
+                        if(tree.IsLog)
+                            Settlement.AddMaterial("Log", 1.0f);
+
+                        Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
+                        tree.Chop();
                         if (--workLeft == 0)
                             return;
                     }
@@ -117,7 +122,63 @@ namespace GameLib
             {
                 for (int j = Y; j < Y + Height; ++j)
                 {
-                    if (Settlement.Map.GetTree(i, j) != null)
+                    Tree tree = Settlement.Map.GetTree(i, j);
+                    if (tree != null && !tree.IsStump)
+                    {
+                        ++workToDo;
+                    }
+                }
+            }
+            return (int)Math.Ceiling((double)workToDo / (3 * assignedPersonCount));
+        }
+    }
+
+    public class CutLogsOrder : ZonedOrder
+    {
+
+        public CutLogsOrder(Settlement settlement, int x, int y, int width, int height) : base(settlement, x, y, width, height)
+        {
+            Color = Color.Red;
+            Name = "Cut Logs";
+        }
+
+        internal override void ProcessTurn()
+        {
+            int workLeft = AssignedPersons.Count() * 3;
+            if (workLeft <= 0)
+                return;
+
+            for (int i = X; i < X + Width; ++i)
+            {
+                for (int j = Y; j < Y + Height; ++j)
+                {
+                    Tree tree = Settlement.Map.GetTree(i, j);
+                    if (tree != null && tree.IsLog && !tree.IsStump)
+                    {
+                        Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
+                        Settlement.AddMaterial("Log", 1.0f);
+                        tree.Chop();
+                        if (--workLeft == 0)
+                            return;
+                    }
+                }
+            }
+        }
+
+        public override int GetWorkLeft()
+        {
+            int assignedPersonCount = AssignedPersons.Count();
+            if (assignedPersonCount <= 0)
+                return -1;
+
+            int workToDo = 0;
+
+            for (int i = X; i < X + Width; ++i)
+            {
+                for (int j = Y; j < Y + Height; ++j)
+                {
+                    Tree tree = Settlement.Map.GetTree(i, j);
+                    if (tree != null && tree.IsLog && !tree.IsStump)
                     {
                         ++workToDo;
                     }

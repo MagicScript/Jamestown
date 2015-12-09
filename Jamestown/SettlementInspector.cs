@@ -46,6 +46,7 @@ namespace Jamestown
             InitializeComponent();
 
             chopTrees.CheckedChanged += CheckedChanged;
+            cutLogs.CheckedChanged += CheckedChanged;
             hunt.CheckedChanged += CheckedChanged;
         }
 
@@ -53,6 +54,8 @@ namespace Jamestown
         {
             if (chopTrees.Checked)
                 currActionType_ = ActionType.PlaceChopZone;
+            else if (cutLogs.Checked)
+                currActionType_ = ActionType.PlaceCutLogsZone;
             else if (hunt.Checked)
                 currActionType_ = ActionType.PlaceHuntZone;
             else
@@ -65,6 +68,16 @@ namespace Jamestown
             {
                 nameLabel_.Text = settlement_.Name;
                 populationLabel.Text = "Population: " + settlement_.Persons.Count();
+
+                var mats = settlement_.Materials;
+                resourceView.RowCount = mats.Count();
+                int i = 0;
+                foreach(var p in mats)
+                {
+                    resourceView.Rows[i].Cells[0].Value = p.Key;
+                    resourceView.Rows[i].Cells[1].Value = p.Value;
+                    ++i;
+                }
             }
             else
             {
@@ -81,6 +94,11 @@ namespace Jamestown
                 settlement_.Name = name;
                 DoUpdate();
             }
+        }
+
+        public void BeginTurn()
+        {
+            DoUpdate();
         }
     }
 }

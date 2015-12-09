@@ -16,6 +16,8 @@ namespace GameLib
 
     public class TreeType
     {
+        public static int MaxCanopySize { get; private set; }
+
         public string Name { get; private set; }
         public LeafType Type { get; private set; }
 
@@ -35,6 +37,9 @@ namespace GameLib
             MatureCanopySize = canopySize;
             GrowthRate = growthRate;
             fallColor_ = fallColor;
+
+            if (MaxCanopySize < MatureCanopySize)
+                MaxCanopySize = (int)Math.Ceiling(MatureCanopySize);
         }
 
         public Color GetColorForSeason(Season season)
@@ -59,6 +64,12 @@ namespace GameLib
     public class Tree
     {
         public TreeType Type { get; private set; }
+        public bool IsStump { get; private set; }
+        public bool IsLog
+        {
+            get { return Diameter >= 0.66f && Diameter <= 1.0f; }
+        }
+
         public float Height
         {
             get
@@ -85,6 +96,7 @@ namespace GameLib
 
         internal Tree(TreeType type, Random R)
         {
+            IsStump = false;
             Type = type;
             //Trees start at 1 year old
             age_ = R.Next(100)/2 + 1.0f;
@@ -93,6 +105,11 @@ namespace GameLib
         internal void ProcessTurn()
         {
             age_ += 1.0f / 52.0f;
+        }
+
+        internal void Chop()
+        {
+            IsStump = true;
         }
 
         private float InterpolateParts(float at10, float at20, float at40)
