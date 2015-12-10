@@ -275,7 +275,7 @@ namespace Jamestown
                         {
                             RectangleF rect = new RectangleF(topLeft, new SizeF(tree.Diameter * tileSize_, tree.Diameter * tileSize_));
                             rect.Offset(-tree.Diameter * tileSize_ * 0.5f, -tree.Diameter * tileSize_ * 0.5f);
-                            e.Graphics.FillEllipse(Brushes.SaddleBrown, rect);
+                            e.Graphics.FillEllipse(Brushes.Brown, rect);
                         }
                         else
                         {
@@ -327,7 +327,7 @@ namespace Jamestown
         {
             Rectangle sourceRect = new Rectangle(startX, startY, tileWidth, tileHeight);
             Rectangle dstRect = new Rectangle(new Point(startX * tileSize_ - lookLocation_.X, startY * tileSize_ - lookLocation_.Y), new Size(tileWidth * tileSize_, tileHeight * tileSize_));
-
+            G.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             G.DrawImage(image, dstRect, sourceRect, GraphicsUnit.Pixel);
         }
 
