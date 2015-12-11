@@ -275,7 +275,7 @@ namespace Jamestown
                         {
                             RectangleF rect = new RectangleF(topLeft, new SizeF(tree.Diameter * tileSize_, tree.Diameter * tileSize_));
                             rect.Offset(-tree.Diameter * tileSize_ * 0.5f, -tree.Diameter * tileSize_ * 0.5f);
-                            e.Graphics.FillEllipse(Brushes.Brown, rect);
+                            e.Graphics.FillEllipse(Brushes.SaddleBrown, rect);
                         }
                         else
                         {
