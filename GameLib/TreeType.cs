@@ -63,11 +63,13 @@ namespace GameLib
 
     public class Tree
     {
+        public const float MinimumLogSize = 0.66f;
+
         public TreeType Type { get; private set; }
         public bool IsStump { get; private set; }
         public bool IsLog
         {
-            get { return Diameter >= 0.66f && Diameter <= 1.0f; }
+            get { return Diameter >= MinimumLogSize; }
         }
 
         public float Height
@@ -110,6 +112,12 @@ namespace GameLib
         internal void Chop()
         {
             IsStump = true;
+        }
+
+        internal int GetLogCount()
+        {
+            int logCount = (int)Math.Floor(Diameter / MinimumLogSize);
+            return logCount;
         }
 
         private float InterpolateParts(float at10, float at20, float at40)

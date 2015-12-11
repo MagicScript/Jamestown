@@ -99,7 +99,7 @@ namespace GameLib
                     if (tree != null && !tree.IsStump)
                     {
                         if(tree.IsLog)
-                            Settlement.AddMaterial("Log", 1.0f);
+                            Settlement.AddMaterial("Log", tree.GetLogCount());
 
                         Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
                         tree.Chop();
@@ -156,7 +156,7 @@ namespace GameLib
                     if (tree != null && tree.IsLog && !tree.IsStump)
                     {
                         Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
-                        Settlement.AddMaterial("Log", 1.0f);
+                        Settlement.AddMaterial("Log", tree.GetLogCount());
                         tree.Chop();
                         if (--workLeft == 0)
                             return;
