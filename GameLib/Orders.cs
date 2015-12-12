@@ -43,14 +43,14 @@ namespace GameLib
             }
         }
 
-        internal virtual void ProcessTurn()
+        internal virtual void ProcessDay()
         {
             
         }
 
-        public virtual int GetWorkLeft()
+        public virtual float GetWorkLeft()
         {
-            return -1;
+            return -1.0f;
         }
     }
 
@@ -85,9 +85,9 @@ namespace GameLib
             Name = "Clear Trees";
         }
 
-        internal override void ProcessTurn()
+        internal override void ProcessDay()
         {
-            int workLeft = AssignedPersons.Count() * 3;
+            float workLeft = AssignedPersons.Count() * 5;
             if (workLeft <= 0)
                 return;
 
@@ -96,27 +96,27 @@ namespace GameLib
                 for(int j = Y; j < Y + Height; ++j)
                 {
                     Tree tree = Settlement.Map.GetTree(i, j);
-                    if (tree != null && !tree.IsStump)
+                    if (tree != null && !tree.IsStump && workLeft >= tree.Diameter)
                     {
                         if(tree.IsLog)
                             Settlement.AddMaterial("Log", tree.GetLogCount());
 
                         Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
                         tree.Chop();
-                        if (--workLeft == 0)
-                            return;
+
+                        workLeft -= tree.Diameter;
                     }
                 }
             }
         }
 
-        public override int GetWorkLeft()
+        public override float GetWorkLeft()
         {
             int assignedPersonCount = AssignedPersons.Count();
             if (assignedPersonCount <= 0)
                 return -1;
 
-            int workToDo = 0;
+            float workToDo = 0.0f;
 
             for (int i = X; i < X + Width; ++i)
             {
@@ -125,11 +125,11 @@ namespace GameLib
                     Tree tree = Settlement.Map.GetTree(i, j);
                     if (tree != null && !tree.IsStump)
                     {
-                        ++workToDo;
+                        workToDo += tree.Diameter;
                     }
                 }
             }
-            return (int)Math.Ceiling((double)workToDo / (3 * assignedPersonCount));
+            return workToDo / (5.0f * assignedPersonCount);
         }
     }
 
@@ -142,9 +142,9 @@ namespace GameLib
             Name = "Cut Logs";
         }
 
-        internal override void ProcessTurn()
+        internal override void ProcessDay()
         {
-            int workLeft = AssignedPersons.Count() * 3;
+            float workLeft = AssignedPersons.Count() * 5;
             if (workLeft <= 0)
                 return;
 
@@ -153,25 +153,25 @@ namespace GameLib
                 for (int j = Y; j < Y + Height; ++j)
                 {
                     Tree tree = Settlement.Map.GetTree(i, j);
-                    if (tree != null && tree.IsLog && !tree.IsStump)
+                    if (tree != null && tree.IsLog && !tree.IsStump && workLeft >= tree.Diameter)
                     {
                         Settlement.AddMaterial("Firewood", tree.CanopySize * tree.CanopySize * 3);
                         Settlement.AddMaterial("Log", tree.GetLogCount());
                         tree.Chop();
-                        if (--workLeft == 0)
-                            return;
+
+                        workLeft -= tree.Diameter;
                     }
                 }
             }
         }
 
-        public override int GetWorkLeft()
+        public override float GetWorkLeft()
         {
             int assignedPersonCount = AssignedPersons.Count();
             if (assignedPersonCount <= 0)
                 return -1;
 
-            int workToDo = 0;
+            float workToDo = 0.0f;
 
             for (int i = X; i < X + Width; ++i)
             {
@@ -180,11 +180,11 @@ namespace GameLib
                     Tree tree = Settlement.Map.GetTree(i, j);
                     if (tree != null && tree.IsLog && !tree.IsStump)
                     {
-                        ++workToDo;
+                        workToDo += tree.Diameter;
                     }
                 }
             }
-            return (int)Math.Ceiling((double)workToDo / (3 * assignedPersonCount));
+            return workToDo / (5.0f * assignedPersonCount);
         }
     }
 

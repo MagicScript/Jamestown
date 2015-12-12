@@ -58,13 +58,13 @@ namespace Jamestown
 
         private void UpdateDuration()
         {
-            int workLeft = order_.GetWorkLeft();
+            float workLeft = order_.GetWorkLeft();
             if (workLeft < 0)
                 durationLabel.Text = "This order will never complete.";
             else if (workLeft == 0)
                 durationLabel.Text = "This order is already complete.";
             else
-                durationLabel.Text = string.Format("This order will complete in {0} weeks.", workLeft);
+                durationLabel.Text = string.Format("This order will complete in {0} weeks.", (int)Math.Ceiling(workLeft));
         }
     }
 }

@@ -41,8 +41,12 @@ namespace GameLib
             get { return ships_.AsEnumerable(); }
         }
 
+        public int DaysInWeek { get; set; }
+
         public Settlement(string name, Map map)
         {
+            //Start with 7 day weeks
+            DaysInWeek = 7;
             Name = name;
             Map = map;
             ships_.Add(new Ship(0, map.Height - 150, ShipType.ThreeMast));
@@ -172,9 +176,15 @@ namespace GameLib
         internal void ProcessTurn()
         {
             List<Order> remaining = new List<Order>();
-            foreach(var order in orders_)
+            for (int i = 0; i < DaysInWeek; ++i)
             {
-                order.ProcessTurn();
+                foreach (var order in orders_)
+                {
+                    order.ProcessDay();
+                }
+            }
+            foreach (var order in orders_)
+            {
                 if (order.GetWorkLeft() > 0)
                 { 
                     remaining.Add(order);
