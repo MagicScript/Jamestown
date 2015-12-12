@@ -153,28 +153,55 @@ namespace GameLib
 
                     var data = new[]
                     {
-                    new { X = 0, Y = height, Type = (int)LandType.Water, WeightX = 40.0, WeightY = 40.0, Weight = 50.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 1, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 2, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
-                    new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 }
-                };
+                        new { X = 0, Y = height, Type = (int)LandType.Water, WeightX = 40.0, WeightY = 40.0, Weight = 50.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 1, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 2, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = 0, WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 },
+                        new { X = R.Next(width), Y = R.Next(height), Type = R.Next(numLandTypes), WeightX = R.NextDouble(), WeightY = R.NextDouble(), Weight = 1.0 }
+                    };
+
+
+                    int[] smallCounts = new int[numLandTypes];
+                    for (int y = 0; y < height/10; ++y)
+                    {
+                        for(int x = 0; x < width/10; ++x)
+                        {
+                            double[] weights = new double[numLandTypes];
+                            for (int i = 0; i < data.Length; ++i)
+                            {
+                                if (data[i].X == x*10 && data[i].Y == y*10)
+                                {
+                                    weights[data[i].Type] += data[i].Weight;
+                                }
+                                else
+                                {
+                                    weights[data[i].Type] += data[i].Weight / Math.Sqrt(data[i].WeightX * Math.Pow(data[i].X - x*10, 2) + data[i].WeightY * Math.Pow(data[i].Y - y*10, 2));
+                                }
+                            }
+
+                            int max = weights.MaxElementIndex();
+                            ++smallCounts[max];
+                        }
+                    }
+
+                    if (smallCounts[(int)LandType.Water] > 0.002 * width * height || smallCounts[(int)LandType.Forest] > 0.005 * width * height || smallCounts[(int)LandType.Plain] > 0.006 * width * height)
+                        continue;
 
                     List<Polygon> polygons = new List<Polygon>();
                     PointF[] linePoints = new PointF[widthCount + 1];
@@ -282,9 +309,7 @@ namespace GameLib
                         }
                     }
                     bitmap.UnlockBits(bitmapData);
-
-                    if (counts[(int)LandType.Water] < 0.2 * width * height && counts[(int)LandType.Forest] < 0.5 * width * height && counts[(int)LandType.Plain] < 0.6 * width * height)
-                        break;
+                    break;
                 }
 
                 Smooth();
